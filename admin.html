@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Novo Admin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="admin-container" id="adminLogin">
+  <h1>NOVO HOST</h1>
+  <p>Administrator access</p>
+
+  <input type="password" id="adminCode"
+    placeholder="Enter admin code">
+
+  <button onclick="unlock()">Unlock Dashboard</button>
+  <p id="error"></p>
+</div>
+
+<div class="dashboard" id="dashboard"
+     style="display:none">
+
+  <h1>NOVO ADMIN</h1>
+  <p>Login Activity Dashboard</p>
+
+  <div class="stats">
+    <h2 id="total">0</h2>
+    <p>Total login attempts</p>
+  </div>
+
+  <button onclick="loadRecords()">Refresh Records</button>
+  <button onclick="clearRecords()" class="delete">
+    Clear Records
+  </button>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>password </th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="records"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+// DEMO ONLY: This code is not secure authentication.
+const ADMIN_CODE = "AREJA";
+
+function unlock() {
+  const code = document.getElementById("adminCode").value;
+
+  if (code === ADMIN_CODE) {
+    document.getElementById("adminLogin").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+    loadRecords();
+  } else {
+    document.getElementById("error").textContent =
+      "Incorrect access code!";
+  }
+}
+
+function loadRecords() {
+  const data = JSON.parse(
+    localStorage.getItem("novoActivity") || "[]"
+  );
+
+  document.getElementById("total").textContent = data.length;
+
+  const tbody = document.getElementById("records");
+  tbody.innerHTML = "";
+
+  data.slice().reverse().forEach(item => {
+    const row = document.createElement("tr");
+
+    [item.username, item.password, item.date, item.time, item.status]
+      .forEach(value => {
+        const cell = document.createElement("td");
+        cell.textContent = value;
+        row.appendChild(cell);
+      });
+
+    tbody.appendChild(row);
+  });
+}
+
+function clearRecords() {
+  if (confirm("Clear all demo activity records?")) {
+    localStorage.removeItem("novoActivity");
+    loadRecords();
+  }
+}
+</script>
+
+</body>
+</html>
